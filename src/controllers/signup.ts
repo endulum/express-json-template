@@ -7,18 +7,18 @@ import usernameValidation from '../common/usernameValidation'
 import prisma from "../prisma";
 
 export const controller: {
-  render: RequestHandler,
+  // render: RequestHandler,
   validate: ValidationChain[],
   submit: RequestHandler
 } = {
-  render: asyncHandler(async (req, res) => {
-    return res.render('layout', {
-      page: 'signup',
-      title: 'Sign Up',
-      prevForm: req.body,
-      formErrors: req.formErrors
-    })
-  }),
+  // render: asyncHandler(async (req, res) => {
+  //   return res.render('layout', {
+  //     page: 'signup',
+  //     title: 'Sign Up',
+  //     prevForm: req.body,
+  //     formErrors: req.formErrors
+  //   })
+  // }),
 
   validate: [
     usernameValidation,
@@ -38,7 +38,6 @@ export const controller: {
   ],
 
   submit: asyncHandler(async (req, res, next) => {
-    if (req.formErrors) return controller.render(req, res, next)
     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
       if (err) throw new Error(err.message)
       await prisma.user.create({
@@ -48,9 +47,9 @@ export const controller: {
         }
       })
     })
-    req.flash('success', 'Your account has been created. Please proceed to log in to your new account.')
-    req.flash('loginUsernamePrefill', req.body.username)
-    return res.redirect('/login')
+    // req.flash('success', 'Your account has been created. Please proceed to log in to your new account.')
+    // req.flash('loginUsernamePrefill', req.body.username)
+    // return res.redirect('/login')
   })
 }
 
