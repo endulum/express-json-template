@@ -20,8 +20,8 @@ It was just the first SQL database I'd been exposed to. It meets my needs, so I 
 Likewise, Prisma is the first ORM I'd been exposed to. As to why an ORM should be used in general, ORMs can define database schemas, standardize migrations, and greatly reduce written raw SQL.
 
 ## Todo
-- Remove anything intrinsic to an HTML server - templating, flashes, sessions - and its required middleware
-- Install and play with REST Client extension
+- ~~Remove anything intrinsic to an HTML server - templating, flashes, sessions - and its required middleware~~
+- ~~Install and play with REST Client extension~~
 - Have all endpoints return `res.json` instead of `res.render`
 ### app.ts Entrypoint
 - Add middleware that deserializes a user into `req.user` using JWT
@@ -32,8 +32,8 @@ Likewise, Prisma is the first ORM I'd been exposed to. As to why an ORM should b
 - `/account` should be POST only
 - New route `GET /user/:userId` that returns given user's account info `{ username, role, isYou }` and 404 if user doesn't exist
 ### Catchall and error handling
-- Allow all other routes and endpoints to return a `404`
-- Error handler returns given status code or a generic `500`, no description for now
+- ~~Allow all other routes and endpoints to return a `404`~~
+- ~~Error handler returns given status code or a generic `500`, no description for now~~
 ### Other consideration
 - Add a linter
 - Add a testing suite

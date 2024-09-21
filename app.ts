@@ -13,13 +13,24 @@ const secret: string | undefined = process.env.SECRET
 if (secret === undefined) throw new Error('Secret is not defined.')
 
 const app = express()
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(asyncHandler(async (req, res, next) => {
-  if (req.user) return mainRouter(req, res, next)
-  else return authRouter(req, res, next)
+app.get('/', asyncHandler(async (req, res) => {
+  res.sendStatus(200); return;
+}))
+
+// app.use(asyncHandler(async (req, res, next) => {
+//   if (req.user) return mainRouter(req, res, next)
+//   else return authRouter(req, res, next)
+// }))
+
+app.get('/error-route', asyncHandler(async (req, res) => {
+  throw new Error('owo')
+}))
+
+app.use('*', asyncHandler(async (req, res) => {
+  res.sendStatus(404); return;
 }))
 
 app.use(errorHandler)
