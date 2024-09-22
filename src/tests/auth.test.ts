@@ -1,14 +1,16 @@
-import express from 'express'
+import app from './app'
+import { getUser } from './helpers'
 import request from 'supertest'
 
-import { router as authRouter } from '../routes/authRouter'
-import errorHandler from '../middleware/errorHandler'
-
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(authRouter)
-app.use(errorHandler)
+describe('getUser helper', () => {
+  test('it works', async () => {
+    const user = await getUser('admin', process.env.ADMIN_PASS as string)
+    expect(user).toBeDefined()
+    for (let property of ['username', 'id', 'token']) {
+      expect(user).toHaveProperty(property)
+    }
+  })
+})
 
 describe('logging in', () => {
   const correctInputs = {
@@ -71,6 +73,8 @@ describe('signing up', () => {
   test('POST /signup - 200 and new user details returned', async () =>{
     const response = await request(app).post('/signup').type('form').send(correctInputs)
     expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty('username')
+    for (let property of ['username', 'id', 'role']) {
+      expect(response.body).toHaveProperty(property)
+    }
   })
 })
