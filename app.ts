@@ -9,9 +9,6 @@ import errorHandler from './src/middleware/errorHandler';
 import { router as authRouter } from './src/routes/authRouter';
 import { router as mainRouter } from './src/routes/mainRouter'
 
-const secret: string | undefined = process.env.SECRET
-if (secret === undefined) throw new Error('Secret is not defined.')
-
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
