@@ -22,7 +22,7 @@ export const controller: {
       .trim()
       .notEmpty().withMessage('Please confirm your password.').bail()
       .custom(async (value, { req }) => {
-        if (value !== req.body.password) throw new Error('Both passwords do not match.')
+        if (req.body.password !== '' && value !== req.body.password) throw new Error('Both passwords do not match.')
       })
       .escape(),
 

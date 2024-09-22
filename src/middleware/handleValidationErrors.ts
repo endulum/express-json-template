@@ -4,11 +4,13 @@ import { validationResult } from "express-validator";
 const handleValidationErrors = asyncHandler(async (req, res, next) => {
   const errorsArray = validationResult(req).array()
   if (errorsArray.length > 0) {
-    res.json(errorsArray.map(error => ({
-      value: 'value' in error ? error.value : '',
-      msg: error.msg,
-      path: 'path' in error ? error.path : ''
-    }))); return;
+    res.status(400).json({
+      errors: errorsArray.map(error => ({
+        value: 'value' in error ? error.value : '',
+        msg: error.msg,
+        path: 'path' in error ? error.path : ''
+      }))
+    }); return;
   }
   return next()
 })
