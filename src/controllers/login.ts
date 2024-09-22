@@ -1,25 +1,14 @@
 import { ValidationChain, body } from "express-validator";
 import asyncHandler from 'express-async-handler'
 import { RequestHandler } from "express";
+import bcrypt from 'bcryptjs'
+
+import prisma from "../prisma";
 
 export const controller: {
-  // render: RequestHandler,
   validate: ValidationChain[],
   submit: RequestHandler
 } = {
-  // render: asyncHandler(async (req, res) => {
-  //   const loginUsernamePrefill = req.flash('loginUsernamePrefill')
-  //   return res.render('layout', {
-  //     page: 'login',
-  //     title: 'Log In',
-  //     prevForm: {
-  //       ...req.body,
-  //       username: loginUsernamePrefill ?? req.body.username
-  //     },
-  //     formErrors: req.formErrors
-  //   })
-  // }),
-
   validate: [
     body('username')
       .trim()
@@ -27,20 +16,20 @@ export const controller: {
       .escape(),
     body('password')
       .trim()
-      .notEmpty().withMessage('Please enter a password.')
+      .notEmpty().withMessage('Please enter a password.').bail()
+      .custom(async (value, { req }) => {
+        if (req.body.username === '') return;
+        const user = await prisma.user.findUnique({
+          where: { username: req.body.username }
+        })
+        if (!user) throw new Error('Incorrect username or password.');
+        const match = await bcrypt.compare(req.body.password, user.password)
+        if (!match) throw new Error('Incorrect username or password.');
+      })
       .escape()
   ],
 
   submit: asyncHandler(async (req, res, next) => {
-    // passport.authenticate('local', (err: Error, user: Express.User) => {
-    //   if (err) return next(err)
-    //   if (!user) {
-    //     req.formErrors = { username: 'Incorrect username or password.' }
-    //     return controller.render(req, res, next)
-    //   } else req.logIn(user, (err) => {
-    //     if (err) return next(err)
-    //     return res.redirect('/')
-    //   })
-    // })(req, res, next)
+    res.sendStatus(200); return;
   })
 }

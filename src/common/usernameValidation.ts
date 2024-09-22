@@ -12,10 +12,11 @@ const usernameValidation = body('username')
     const existingUser = await prisma.user.findUnique({
       where: { username: value }
     })
-    if (existingUser && 'user' in req && existingUser.id !== req.user.id)
+    if (existingUser && !('user' in req && existingUser.id === req.user.id)) {
       throw new Error(
         'A user with this username already exists. Usernames must be unique.'
       )
+    }
   })
   .escape()
 

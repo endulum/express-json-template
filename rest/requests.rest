@@ -4,9 +4,21 @@ GET {{hostname}}
 ###
 POST {{hostname}}/login
 Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
 ###
 POST {{hostname}}/signup
 Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password",
+  "confirmPassword": "password",
+  "deleteAfter": true
+}
 ###
 GET {{hostname}}/user/1
 ###
