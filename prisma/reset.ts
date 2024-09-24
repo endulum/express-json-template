@@ -14,23 +14,30 @@ async function clearDatabase() {
   await prisma.session.deleteMany()
 }
 
-async function generateAdmin() {
-  if (!process.env.ADMINPASS) return;
+async function generateUsers() {
+  if (!process.env.ADMIN_PASS) return;
   const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(process.env.ADMINPASS, salt)
-  await prisma.user.create({
-    data: {
-      username: 'admin',
-      password: hashedPassword,
-      id: 1,
-      role: 'ADMIN'
-    }
+  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS, salt)
+  await prisma.user.createMany({
+    data: [
+      {
+        username: 'admin',
+        password: hashedPassword,
+        id: 1,
+        role: 'ADMIN'
+      }, {
+        username: 'basic',
+        password: hashedPassword,
+        id: 2,
+        role: 'BASIC'
+      }
+    ]
   })
 }
 
 async function main() {
   await clearDatabase()
-  await generateAdmin()
+  await generateUsers()
 }
 
 main()

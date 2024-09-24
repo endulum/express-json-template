@@ -14,6 +14,6 @@ router.route('/')
 
 router.route('/account')
   // .get(account.render)
-  .post(account.validate, handleValidationErrors, account.submit)
+  .post(user.deserialize, account.validate, handleValidationErrors, account.submit)
 
 export { router }
