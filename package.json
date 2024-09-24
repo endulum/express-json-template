@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "ENV=development jest --watch ./src/tests",
+    "test": "ENV=development jest --watch",
     "dev": "ENV=development nodemon --exec ts-node ./app.ts",
     "start": "ENV=production node ./dist/app.js",
     "build": "tsc && cp -r ./src/views ./dist/src/views",

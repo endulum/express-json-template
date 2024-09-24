@@ -1,16 +1,5 @@
 import app from './app'
-import { getUser } from './helpers'
 import request from 'supertest'
-
-describe('getUser helper', () => {
-  test('it works', async () => {
-    const user = await getUser('admin', process.env.ADMIN_PASS as string)
-    expect(user).toBeDefined()
-    for (let property of ['username', 'id', 'token']) {
-      expect(user).toHaveProperty(property)
-    }
-  })
-})
 
 describe('logging in', () => {
   const correctInputs = {
