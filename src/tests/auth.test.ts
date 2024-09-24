@@ -1,5 +1,4 @@
-import app from './app'
-import request from 'supertest'
+import { req } from './helpers'
 
 describe('logging in', () => {
   const correctInputs = {
@@ -15,9 +14,7 @@ describe('logging in', () => {
     ]
 
     for (let wrongInputs of wrongInputsArray) {
-      const response = await request(app).post('/login').type('form').send({
-        ...correctInputs, ...wrongInputs
-      })
+      const response = await req('POST', '/login', { ...correctInputs, ...wrongInputs }, null)
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
       expect(response.body.errors.length).toEqual(1)
@@ -25,7 +22,7 @@ describe('logging in', () => {
   })
 
   test('POST /login - 200 and token', async () => {
-    const response = await request(app).post('/login').type('form').send(correctInputs)
+    const response = await req('POST', '/login', correctInputs, null)
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('token')
   })
@@ -50,9 +47,7 @@ describe('signing up', () => {
     ]
 
     for (let wrongInputs of wrongInputsArray) {
-      const response = await request(app).post('/signup').type('form').send({
-        ...correctInputs, ...wrongInputs
-      })
+      const response = await req('POST', '/signup', { ...correctInputs, ...wrongInputs }, null)
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
       expect(response.body.errors.length).toEqual(1)
@@ -60,7 +55,7 @@ describe('signing up', () => {
   })
 
   test('POST /signup - 200 and new user details returned', async () =>{
-    const response = await request(app).post('/signup').type('form').send(correctInputs)
+    const response = await req('POST', '/signup', correctInputs, null)
     expect(response.status).toBe(200)
     for (let property of ['username', 'id', 'role']) {
       expect(response.body).toHaveProperty(property)
