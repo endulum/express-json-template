@@ -1,18 +1,18 @@
-import express from 'express'
-import asyncHandler from 'express-async-handler'
-import handleValidationErrors from '../middleware/handleValidationErrors'
+import express from 'express';
+import asyncHandler from 'express-async-handler';
+import handleValidationErrors from '../middleware/handleValidationErrors';
 
-import { controller as account } from '../controllers/account'
-import { controller as user } from '../controllers/user'
+import account from '../controllers/account';
+import user from '../controllers/user';
 
-const router = express.Router()
+const router = express.Router();
 
 router.route('/')
   .get(user.deserialize, asyncHandler(async (req, res) => {
-    res.json(req.user); return;
-  }))
+    res.json(req.user);
+  }));
 
 router.route('/account')
-  .post(user.deserialize, account.validate, handleValidationErrors, account.submit)
+  .post(user.deserialize, account.validate, handleValidationErrors, account.submit);
 
-export { router }
+export default router;

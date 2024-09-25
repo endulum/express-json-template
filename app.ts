@@ -1,29 +1,28 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env' })
-dotenv.config({ path: '.env.' + process.env.ENV })
-
 import express from 'express';
-import asyncHandler from 'express-async-handler'
-
+import asyncHandler from 'express-async-handler';
 import errorHandler from './src/middleware/errorHandler';
-import { router as authRouter } from './src/routes/authRouter';
-import { router as mainRouter } from './src/routes/mainRouter'
+import authRouter from './src/routes/authRouter';
+import mainRouter from './src/routes/mainRouter';
 
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+dotenv.config({ path: '.env' });
+dotenv.config({ path: `.env.${process.env.ENV}` });
 
-app.get('/', asyncHandler(async (req, res) => {
-  res.sendStatus(200); return;
-}))
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(authRouter)
-app.use(mainRouter)
+app.get('/', asyncHandler(async (_req, res) => {
+  res.sendStatus(200);
+}));
 
-app.use('*', asyncHandler(async (req, res) => {
-  res.sendStatus(404); return;
-}))
+app.use(authRouter);
+app.use(mainRouter);
 
-app.use(errorHandler)
+app.use('*', asyncHandler(async (_req, res) => {
+  res.sendStatus(404);
+}));
 
-app.listen(3000)
+app.use(errorHandler);
+
+app.listen(3000);

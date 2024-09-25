@@ -4,10 +4,13 @@
   },
   "files": [
     "app.ts",
-    "./src/index.d.ts"
+    "./src/index.d.ts",
+    "eslint.config.mjs"
   ],
+  "include": ["./src/tests/*.ts",],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "allowJs": true,
     "module": "CommonJS",
     "sourceMap": true,
     "outDir": "dist",

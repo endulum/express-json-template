@@ -1,12 +1,12 @@
-import { ValidationChain, body } from "express-validator";
-import asyncHandler from 'express-async-handler'
-import { RequestHandler } from "express";
-import bcrypt from 'bcryptjs'
+import { ValidationChain, body } from 'express-validator';
+import asyncHandler from 'express-async-handler';
+import { RequestHandler } from 'express';
+import bcrypt from 'bcryptjs';
 
-import usernameValidation from '../common/usernameValidation'
-import prisma from "../prisma";
+import usernameValidation from '../common/usernameValidation';
+import prisma from '../prisma';
 
-export const controller: {
+const controller: {
   validate: ValidationChain[],
   submit: RequestHandler
 } = {
@@ -14,41 +14,44 @@ export const controller: {
     usernameValidation,
     body('password')
       .trim()
-      .notEmpty().withMessage('Please enter a password.').bail()
-      .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long.')
+      .notEmpty().withMessage('Please enter a password.')
+      .bail()
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long.')
       .escape(),
 
     body('confirmPassword')
       .trim()
-      .notEmpty().withMessage('Please confirm your password.').bail()
+      .notEmpty().withMessage('Please confirm your password.')
+      .bail()
       .custom(async (value, { req }) => {
-        if (req.body.password !== '' && value !== req.body.password) throw new Error('Both passwords do not match.')
+        if (req.body.password !== '' && value !== req.body.password) throw new Error('Both passwords do not match.');
       })
       .escape(),
 
     body('deleteAfter')
       .trim()
       .isBoolean()
-      .escape()
+      .escape(),
   ],
 
   submit: asyncHandler(async (req, res) => {
     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-      if (err) throw new Error(err.message)
+      if (err) throw new Error(err.message);
       const newUser = await prisma.user.create({
         data: {
           username: req.body.username,
-          password: hashedPassword
-        }
-      })
+          password: hashedPassword,
+        },
+      });
       if ('deleteAfter' in req.body && req.body.deleteAfter === 'true') {
         await prisma.user.delete({
-          where: { id: newUser.id }
-        })
+          where: { id: newUser.id },
+        });
       }
-      res.status(200).json(newUser); return;
-    })
-  })
-}
+      res.status(200).json(newUser);
+    });
+  }),
+};
 
-export default controller
+export default controller;
