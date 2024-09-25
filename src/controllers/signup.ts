@@ -32,7 +32,7 @@ export const controller: {
       .escape()
   ],
 
-  submit: asyncHandler(async (req, res, next) => {
+  submit: asyncHandler(async (req, res) => {
     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
       if (err) throw new Error(err.message)
       const newUser = await prisma.user.create({

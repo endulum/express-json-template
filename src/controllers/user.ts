@@ -27,7 +27,7 @@ export const controller: {
           req.user = user
           return next()
         }
-      } catch (err) {
+      } catch {
         res.sendStatus(401); return;
       }
     }

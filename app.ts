@@ -20,10 +20,6 @@ app.get('/', asyncHandler(async (req, res) => {
 app.use(authRouter)
 app.use(mainRouter)
 
-app.get('/error-route', asyncHandler(async (req, res) => {
-  throw new Error('owo')
-}))
-
 app.use('*', asyncHandler(async (req, res) => {
   res.sendStatus(404); return;
 }))

@@ -6,7 +6,7 @@ import prisma from '../prisma'
 export async function req(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   url: string,
-  form: Record<string, any> | null,
+  form: Record<string, unknown> | null,
   token: string | null
 ): Promise<Response> {
   // any way to have '.post()', '.put()', '.delete()' conditionally chained? and without type errors?

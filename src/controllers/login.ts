@@ -31,7 +31,7 @@ export const controller: {
       .escape()
   ],
 
-  submit: asyncHandler(async (req, res, next) => {
+  submit: asyncHandler(async (req, res) => {
     if (!process.env.TOKEN_SECRET) throw new Error('Token secret is not defined.');
     const token = jwt.sign(req.user, process.env.TOKEN_SECRET)
     res.json({ token }); return;

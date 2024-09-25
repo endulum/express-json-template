@@ -41,7 +41,7 @@ export const controller: {
       .escape()
   ],
 
-  submit: asyncHandler(async (req, res, next) => {
+  submit: asyncHandler(async (req, res) => {
     if (!req.user) {
       res.sendStatus(401); return;
     } else {

@@ -42,7 +42,7 @@ describe('change account detail', () => {
       { currentPassword: 'some mismatched password' }
     ]
 
-    for (let wrongInputs of wrongInputsArray) {
+    for (const wrongInputs of wrongInputsArray) {
       const response = await req('POST', '/account', { ...correctInputs, ...wrongInputs }, token)
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')

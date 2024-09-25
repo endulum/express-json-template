@@ -13,7 +13,6 @@ router.route('/')
   }))
 
 router.route('/account')
-  // .get(account.render)
   .post(user.deserialize, account.validate, handleValidationErrors, account.submit)
 
 export { router }

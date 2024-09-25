@@ -13,7 +13,7 @@ describe('logging in', () => {
       { password: 'some wrong password' }
     ]
 
-    for (let wrongInputs of wrongInputsArray) {
+    for (const wrongInputs of wrongInputsArray) {
       const response = await req('POST', '/login', { ...correctInputs, ...wrongInputs }, null)
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
@@ -46,7 +46,7 @@ describe('signing up', () => {
       { confirmPassword: 'some mismatched password' }
     ]
 
-    for (let wrongInputs of wrongInputsArray) {
+    for (const wrongInputs of wrongInputsArray) {
       const response = await req('POST', '/signup', { ...correctInputs, ...wrongInputs }, null)
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
@@ -57,7 +57,7 @@ describe('signing up', () => {
   test('POST /signup - 200 and new user details returned', async () =>{
     const response = await req('POST', '/signup', correctInputs, null)
     expect(response.status).toBe(200)
-    for (let property of ['username', 'id', 'role']) {
+    for (const property of ['username', 'id', 'role']) {
       expect(response.body).toHaveProperty(property)
     }
   })
