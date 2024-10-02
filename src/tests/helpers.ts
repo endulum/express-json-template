@@ -1,4 +1,5 @@
 import request, { Response } from 'supertest';
+import bcrypt from 'bcryptjs';
 
 import app from './app';
 import prisma from '../prisma';
@@ -38,4 +39,28 @@ Promise<{ username: string, id: number, token: string }> {
   const response = await request(app).post('/login').type('form').send({ username, password });
   if (!('body' in response) || !('token' in response.body)) throw new Error('Failed logging in this user.');
   return { username, id: user.id, token: response.body.token as string };
+}
+
+export async function createUsers() {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS as string, salt);
+  await prisma.user.createMany({
+    data: [
+      {
+        username: 'admin',
+        password: hashedPassword,
+        id: 1,
+        role: 'ADMIN',
+      }, {
+        username: 'basic',
+        password: hashedPassword,
+        id: 2,
+        role: 'BASIC',
+      },
+    ],
+  });
+}
+
+export async function wipeTables(tables: Array<'user' | 'session'>) {
+  if (tables.includes('user')) await prisma.user.deleteMany({});
 }

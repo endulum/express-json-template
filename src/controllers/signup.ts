@@ -36,21 +36,15 @@ const controller: {
   ],
 
   submit: asyncHandler(async (req, res) => {
-    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-      if (err) throw new Error(err.message);
-      const newUser = await prisma.user.create({
-        data: {
-          username: req.body.username,
-          password: hashedPassword,
-        },
-      });
-      if ('deleteAfter' in req.body && req.body.deleteAfter === 'true') {
-        await prisma.user.delete({
-          where: { id: newUser.id },
-        });
-      }
-      res.status(200).json(newUser);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASS as string, salt);
+    await prisma.user.create({
+      data: {
+        username: req.body.username,
+        password: hashedPassword,
+      },
     });
+    res.sendStatus(200);
   }),
 };
 
