@@ -12,6 +12,9 @@ router.route('/')
     res.json(req.user);
   }));
 
+router.route('/user/:userId')
+  .get(user.exists, user.get);
+
 router.route('/account')
   .post(user.deserialize, account.validate, handleValidationErrors, account.submit);
 

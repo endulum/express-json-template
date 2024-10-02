@@ -22,7 +22,27 @@ describe('deserialize user', () => {
   });
 });
 
-describe('change account detail', () => {
+describe('get user', () => {
+  test('GET /user/:userId - 404 if invalid id', async () => {
+    const response = await helpers.req('GET', '/user/owo', null, null);
+    expect(response.status).toBe(404);
+  });
+
+  test('GET /user/:userId - 404 if user not found', async () => {
+    const response = await helpers.req('GET', '/user/5', null, null);
+    expect(response.status).toBe(404);
+  });
+
+  test('GET /user/:userId - 200 and user details', async () => {
+    const response = await helpers.req('GET', '/user/1', null, null);
+    expect(response.status).toBe(200);
+    await Promise.all(['username', 'id', 'role'].map(async (property) => {
+      expect(response.body).toHaveProperty(property);
+    }));
+  });
+});
+
+describe('change account details', () => {
   const correctInputs = {
     username: 'admin',
     password: 'new-password',

@@ -9,7 +9,9 @@ interface IJwtPayload extends jsonwebtoken.JwtPayload {
 }
 
 const controller: {
-  deserialize: RequestHandler
+  deserialize: RequestHandler,
+  exists: RequestHandler,
+  get: RequestHandler
 } = {
   deserialize: asyncHandler(async (req, res, next) => {
     const bearerHeader = req.headers.authorization;
@@ -36,6 +38,29 @@ const controller: {
     } catch {
       res.sendStatus(401);
     }
+  }),
+
+  exists: asyncHandler(async (req, res, next) => {
+    const id = parseInt(req.params.userId, 10);
+    if (id % 1 !== 0) {
+      res.sendStatus(404);
+    } else {
+      const user = await prisma.user.findUnique({ where: { id } });
+      if (!user) {
+        res.sendStatus(404);
+      } else {
+        req.thisUser = user;
+        next();
+      }
+    }
+  }),
+
+  get: asyncHandler(async (req, res) => {
+    res.json({
+      username: req.thisUser.username,
+      id: req.thisUser.id,
+      role: req.thisUser.role,
+    });
   }),
 };
 

@@ -22,4 +22,4 @@ It was just the first SQL database I'd been exposed to. It meets my needs, so I 
 Likewise, Prisma is the first ORM I'd been exposed to. As to why an ORM should be used in general, ORMs can define database schemas, standardize migrations, and greatly reduce written raw SQL.
 
 ## Todo
-- New route `GET /user/:userId` that returns given user's account info `{ username, role, isYou }` and 404 if user doesn't exist
+- ...
